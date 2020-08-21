@@ -5,23 +5,34 @@ async function post(req, res, next) {
 
     for (key of keys) {
         if (req.body[key] == "") {
-        return res.send('Por favor, preencha todos os campos!')
+        return res.render('user/register', {
+            user: req.body,
+            error: 'Por favor, preencha todos os campos!'
+        })
         }
     }
 
-    const {email, cpf_cnpj, password, passwordRepeat} = req.body
+    let {email, cpf_cnpj, password, passwordRepeat} = req.body
 
     cpf_cnpj = cpf_cnpj.replace(/\D/g, "")
+
+    console.log(cpf_cnpj)
 
     const user = await User.findOne({ 
         where: {email},
         or: {cpf_cnpj}
     })
 
-    if(user) return res.send('Este usuário já existe!')
+    if(user) return res.render('user/register', {
+        user: req.body,
+        error: 'Usuário já cadastrado!'
+    })
 
     if(password != passwordRepeat)
-        return res.send('As senhas digitadas precisam ser iguais!')
+        return res.render('user/register', {
+            user: req.body,
+            error: 'As senhas digitadas precisam ser iguais!'
+        })
 
     next()
 }
