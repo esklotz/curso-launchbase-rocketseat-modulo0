@@ -33,8 +33,6 @@ module.exports = {
             cpf_cnpj = cpf_cnpj.replace(/\D/g, "")
             cep = cep.replace(/\D/g, "")
 
-            console.log({user,name, email, cpf_cnpj, cep, address})
-
             await User.update(user.id, {
                 name,
                 email,
